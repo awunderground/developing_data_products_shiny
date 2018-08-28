@@ -24,13 +24,13 @@ ui <- fluidPage(
                        sep = ""),
            sliderInput(inputId = "clusters", label = "Number of Clusters", 
                        min = 2, max = 10, value = 3, step = 1),           
-           radioButtons("distance", "Distribution type:",
-                        c("Euclidean" = "euclidean",
-                          "Manhattan" = "manhattan")),
            radioButtons("scale", "Type of scaling",
                         c("Raw" = "raw",
                           "Linear" = "linear",
-                          "Standardized" = "standardized"))
+                          "Standardized" = "standardized")),
+           radioButtons("point_type", "Points or names",
+                        c("Points" = "points",
+                          "Names" = "names"))
     )
   )
 )
@@ -102,14 +102,23 @@ server <- function(input, output) {
   })
   
   output$plot <- renderPlot({      
-    ggplot() +
-      geom_point(data = plot_data(), 
-                 aes(PC1, PC2, color = .cluster), 
-                 alpha = 0.5, size = 3) +
+    gg <- ggplot() +
       geom_point(data = tidy_centers(), 
                  aes(PC1, PC2, fill = .cluster), 
                  alpha = 0.8, size = 5, shape = 24, color = "black", stroke = 2)
-      
+     
+    if (input$point_type == "points") { 
+      gg +
+        geom_point(data = plot_data(), 
+                   aes(PC1, PC2, color = .cluster), 
+                   alpha = 0.5, size = 3)
+    } else if (input$point_type == "names") {
+      gg +
+        geom_text(data = plot_data(), 
+                   aes(PC1, PC2, color = .cluster, label = paste(season, last_name)), 
+                   alpha = 0.8, size = 3)   
+    }
+  
   })
   
   output$hover_info <- renderUI({
