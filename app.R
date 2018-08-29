@@ -9,17 +9,41 @@ ui <- fluidPage(
   theme = "shiny.css",
   
   fluidRow(
+    
+    column(8,
+           h2("Clustering VCU basketball players (2000-2016)"),
+           p("This application uses k-means clustering to cluster VCU basketball 
+             players based on their size and statistics. Users can manipulate 
+             the pre-processing and parameters of the clustering process. Players 
+             sharing the same cluster have similar playing styles. Hover over 
+             points or scroll to the bottom to learn more.")
+    )
+  ),
+  
+  fluidRow(
+    
     column(8,
            plotOutput("plot", 
                       hover = hoverOpts("plot_hover", delay = 100, delayType = "debounce")),
-           uiOutput("hover_info")
+           uiOutput("hover_info"),
+           p("PC1 and PC2 are the first and second principle components from a 
+             principle component analysis (PCA). PCA is a transformation that 
+             converts many variables into a set of linearly uncorrelated 
+             variables."),
+           p(HTML("<b>Type of scaling</b> - k-means clustering is sensitive to the distributions of variables. 
+                  In particular, variables with large ranges behave differently than variables with small 
+                  ranges. <b>Raw</b> uses data that aren't pre-processed. <b>Linear</b> transforms all variables so they 
+                  have a 1 to 100 scale. <b>Standardized</b> subtracts the mean from each variable and then divides 
+                  by the standard deviation.")),
+           p(HTML("<b>Point or names</b> - toggles between points and names on the plots."))
     ),
 
+    
     column(4,
            sliderInput(inputId = "seasons", label = "Seasons", 
-                       min = 2010, 
+                       min = 2000, 
                        max = 2016, 
-                       value = c(2000, 2016), 
+                       value = c(2010, 2016), 
                        step = 1,
                        sep = ""),
            sliderInput(inputId = "clusters", label = "Number of Clusters", 
@@ -32,7 +56,38 @@ ui <- fluidPage(
                         c("Points" = "points",
                           "Names" = "names"))
     )
+  ),
+  
+  fluidRow(
+    column(12, 
+           h2("Data"),
+           DT::DTOutput("data_table"),
+           
+           p(HTML("<p><b>MPG</b> - minutes per game</p>
+             <p><b>Usage</b> - usage rate. A measure of the number of possessions used by a player.</p>
+             <p><b>Points/30</b> - points per 30 minutes</p>
+             <p><b>TS</b> - true shooting proportion. </p> 
+             <p><b>FTR</b> - free throw rate. Number of free throw attempts divided by true shooting attempts.</p> 
+             <p><b>3PR</b> - three point rate Number of three point attempts divided by true shooting attempts.</p>
+             <p><b>Assists/30</b> - assists per 30 minutes</p>
+             <p><b>TO/30</b> - turnovers per 30 minutes</p>
+             <p><b>OR/30</b> - offensive rebounds per 30 minutes</p>
+             <p><b>DR/30</b> - defensive rebounds per 30 minutes</p>
+             <p><b>Steals/30</b> - steals per 30 minutes</p>
+             <p><b>Blocks/30</b> - blocks per 30 minutes</p>
+             <p><b>Fouls/30</b> - fouls per 30 minutes</p>
+             <p><b>Pounds/inch</b> - pounds per inch of height</p>
+             <p><b>Height</b> - height in inches</p>")),
+           br(),
+           p(HTML("All code is available on <a href = 'https://github.com/awunderground/developing_data_products_shiny'>GitHub</a>")),
+           p(HTML("<a href = 'https://twitter.com/awunderground'>Twitter</a>"))
+    )
   )
+  
+  
+  
+
+  
 )
 
 server <- function(input, output) {
@@ -57,9 +112,9 @@ server <- function(input, output) {
     } else if (input$scale == "linear") {
       players_numeric %>%
         mutate_all(scale)   
-    } else if (input$scale == "standardize") {
+    } else if (input$scale == "standardized") {
       players_numeric %>%
-        mutate_all(stats::rescale, to = c(1, 100))      
+        mutate_all(scales::rescale, to = c(1, 100))      
     }
   })
   
@@ -125,9 +180,7 @@ server <- function(input, output) {
     hover <- input$plot_hover
     
     point <- nearPoints(plot_data(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
-    
-    print(plot_data())
-    
+  
     if (nrow(point) == 0) return(NULL)
     
     left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
@@ -155,6 +208,30 @@ server <- function(input, output) {
                     "<b> Pounds per inch: </b>", round(point$pounds_per_inch, 2), "<br/>"
         )))
     )
+  })
+  
+  output$data_table <- DT::renderDT({
+    players_subset() %>%
+      select(-first_name) %>%
+      mutate_if(is.numeric, round, digits = 2) %>%
+      rename(Year = season,
+             Name = last_name,
+             MPG = average_minutes,
+             Usage = usage,
+             Games = games_played,
+             `Points/30` = points_per30,
+             TS = true_shooting_proportion,
+             FTR = free_throw_rate,
+             `3PR` = three_point_rate,
+             `Assists/30` = assists_per30,
+             `TO/30` = turnovers_per30,
+             `OR/30` = offensive_rebounds_per30,
+             `DR/30` = defensive_rebounds_per30,
+             `Steals/30` = steals_per30,
+             `Blocks/30` = blocks_per30,
+             `Fouls/30` = fouls_per30,
+             `Pounds/inch` = pounds_per_inch,
+             Height = height_inches)
   })
 
 }

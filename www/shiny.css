@@ -1,0 +1,16 @@
+body {
+  font: Lato;
+}
+
+dataTables_wrapper no-footer {
+  font-size: 10px;
+}
+
+
+.data_table {
+  font-size: 8px;
+}
+
+#data_table {
+  font-size: 8px;
+}
