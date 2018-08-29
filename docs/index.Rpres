@@ -12,7 +12,7 @@ Most sports create rich data sets with limited measurement error.
 
 ```{r}
 library(readr)
-head(read_csv("clean-data/input-data.csv"))
+head(read_csv("../clean-data/input-data.csv"))
 ```
 
 

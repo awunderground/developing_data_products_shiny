@@ -539,6 +539,17 @@ body {
     background: white;
 }
 
+.reveal pre code {
+    display: block;
+    padding: 0.5em;
+    font-size: 0.8em;
+    line-height: 1.1em;
+    background-color: white;
+    overflow: visible;
+    max-height: none;
+    word-wrap: normal;
+}
+
   </style>
   
   <!-- reveal print css -->
@@ -772,6 +783,28 @@ hljs.initHighlightingOnLoad();
 <section data-transition="linear" data-transition-speed="default">
 <h3>Sports are a great subject for teaching statistics</h3>
 <div class="slideContent" >
+<p>Most sports create rich data sets with limited measurement error. </p>
+
+<pre><code class="r">library(readr)
+head(read_csv(&quot;../clean-data/input-data.csv&quot;))
+</code></pre>
+
+<pre><code># A tibble: 6 x 19
+  season last_name   first_name average_minutes usage games_played
+   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt;        &lt;int&gt;
+1   2000 Jones       Bo                    28.9  29.3           28
+2   2000 Taylor      LaMar                 33.6  21.6           28
+3   2000 Hampton     Shawn                 24.3  21.6           28
+4   2000 Okosa       Reggie                21.1  22.2           28
+5   2000 Lilly       Scott                 23.3  17.0           28
+6   2000 Likcholitov L.F.                  15    19.6           28
+# ... with 13 more variables: points_per30 &lt;dbl&gt;,
+#   true_shooting_proportion &lt;dbl&gt;, free_throw_rate &lt;dbl&gt;,
+#   three_point_rate &lt;dbl&gt;, assists_per30 &lt;dbl&gt;, turnovers_per30 &lt;dbl&gt;,
+#   offensive_rebounds_per30 &lt;dbl&gt;, defensive_rebounds_per30 &lt;dbl&gt;,
+#   steals_per30 &lt;dbl&gt;, blocks_per30 &lt;dbl&gt;, fouls_per30 &lt;dbl&gt;,
+#   pounds_per_inch &lt;dbl&gt;, height_inches &lt;int&gt;
+</code></pre>
 
 </div>
 
