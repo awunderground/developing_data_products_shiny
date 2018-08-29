@@ -1,0 +1,54 @@
+Clustering VCU basketball players (2000-2016)
+========================================================
+author: Aaron Williams
+date: 2018-08-28
+autosize: true
+css: www/slides.css
+
+Sports are a great subject for teaching statistics
+========================================================
+
+Most sports create rich data sets with limited measurement error. 
+
+```{r}
+library(readr)
+head(read_csv("clean-data/input-data.csv"))
+```
+
+
+Most sports analytics are...
+========================================================
+
+#### opaque
+
+<iframe width="1000" height="150" src="http://rpiratings.com/mensrpi.php"></iframe>
+
+#### proprietary
+
+<iframe width="1000" height="150" src="https://www.basketball-reference.com/"></iframe>
+
+#### lack good visualization
+
+<iframe width="1000" height="150" src="https://kenpom.com/"></iframe>
+
+
+My application is...
+========================================================
+
+#### Reproducible and opensource
+
+<iframe width="1000" height="100" src="https://github.com/awunderground/developing_data_products_shiny"></iframe>
+
+#### Contains slick visualizations
+
+#### Plus: 
+
+The data are cutting-edge analytics about the Virginia Commonwealth Men's basketball team from 2000 to 2016. The application also uses an unsupervised machine learning technique called k-means clustering. 
+
+It also blends the joy of college basketball with an educational tool about how k-means clustering parameters affect clusters. 
+
+
+Clustering VCU basketball players (2000-2016)
+========================================================
+
+<iframe width="1000" height="800" src="https://awunderground.shinyapps.io/developing_data_products_shiny/"></iframe>

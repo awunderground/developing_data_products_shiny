@@ -1,0 +1,25 @@
+.container-fluid {
+  font-family: Lato;
+}
+
+.section .reveal h1, 
+.section .reveal h2, 
+.section .reveal p {
+    color: black;
+    margin-top: 50px;
+}
+
+.section .reveal .state-background {
+    background: white;
+}
+
+.reveal pre code {
+    display: block;
+    padding: 0.5em;
+    font-size: 0.8em;
+    line-height: 1.1em;
+    background-color: white;
+    overflow: visible;
+    max-height: none;
+    word-wrap: normal;
+}
